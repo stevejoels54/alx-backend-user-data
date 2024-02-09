@@ -42,14 +42,30 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
     host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
     db_name = environ.get("PERSONAL_DATA_DB_NAME")
 
-    db = mysql.connector.connection.MySQLConnection(
+    con = mysql.connector.connection.MySQLConnection(
         user=username,
         password=password,
         host=host,
         database=db_name
     )
 
-    return db
+    return con
+
+
+def main():
+    """Retrieves data from the users table and logs it with filtered format."""
+    db = get_db()
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM users;")
+    fields = [desc[0] for desc in cursor.description]
+
+    logger = get_logger()
+    for row in cursor:
+        filtered_row = {field: row[field] for field in fields}
+        logger.info(filtered_row)
+
+    cursor.close()
+    db.close()
 
 
 class RedactingFormatter(logging.Formatter):
@@ -69,3 +85,7 @@ class RedactingFormatter(logging.Formatter):
         return filter_datum(self.fields, self.REDACTION,
                             super(RedactingFormatter, self).format(record),
                             self.SEPARATOR)
+
+
+if __name__ == "__main__":
+    main()
