@@ -19,7 +19,7 @@ def filter_datum(fields: List[str], redaction: str,
     return message
 
 
-def get_logger():
+def get_logger() -> logging.Logger:
     """Returns Logger object with specific configurations."""
     logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
