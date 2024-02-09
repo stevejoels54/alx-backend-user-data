@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Filtered logger"""
-
-
+"""
+Personal Data handling
+"""
 import re
 from typing import List
 
