@@ -20,7 +20,7 @@ class Auth:
         for p in excluded_paths:
             if p[-1] != '/':
                 p += '/'
-            p = p.replace('*', '.*')  # replace '*' with '.*' to create a regex pattern
+            p = p.replace('*', '.*')
             if re.match(p, path):
                 return False
         return True
