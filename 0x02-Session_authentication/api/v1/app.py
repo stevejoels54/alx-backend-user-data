@@ -45,22 +45,26 @@ def forbidden(error) -> str:
 
 
 @app.before_request
-def before_request() -> None:
-    """ Before request
-    """
-    if auth:
-        excluded_paths = [
-            '/api/v1/status/',
-            '/api/v1/unauthorized/',
-            '/api/v1/forbidden/',
-        ]
+def before_request():
+    """ Method to handle before request """
+    request.current_user = auth.current_user(request)
 
-        if auth.require_auth(request.path, excluded_paths):
-            if not auth.authorization_header(request):
-                abort(401)
-            if not auth.current_user(request):
-                abort(403)
-
+    excluded_paths = [
+        '/api/v1/status/',
+        '/api/v1/unauthorized/',
+        '/api/v1/forbidden/'
+        '/api/v1/auth_session/login/'
+    ]
+    if request.path not in excluded_paths:
+        if not auth.require_auth(request.path, excluded_paths):
+            return abort(404)
+        if auth.authorization_header(request) is None and auth.session_cookie(
+                request) is None:
+            return abort(401)
+        if auth.authorization_header(request) is None:
+            return abort(401)
+        if request.current_user is None:
+            return abort(403)
 
 if __name__ == "__main__":
     host = getenv("API_HOST", "0.0.0.0")
