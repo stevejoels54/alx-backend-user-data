@@ -32,7 +32,13 @@ class DB:
         return self.__session
 
     def add_user(self, email: str, hashed_password: str) -> User:
-        """Adds new user to database
+        """
+        Adds new user to database
+        Args:
+            email: email of user
+            hashed_password: password of user
+        Returns:
+            User object
         """
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
@@ -40,7 +46,12 @@ class DB:
         return user
 
     def find_user_by(self, **kwargs) -> User:
-        """Finds user in database
+        """
+        Finds user in database
+        Args:
+            **kwargs: arbitrary keyword arguments
+        Returns:
+            User object
         """
         user = self._session.query(User).filter_by(**kwargs).first()
         if user is None:
