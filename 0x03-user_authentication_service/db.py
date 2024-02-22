@@ -5,7 +5,8 @@ from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
-from sqlalchemy.exc import NoResultFound, InvalidRequestError
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
 
 from user import Base, User
 
@@ -47,9 +48,6 @@ class DB:
             return user
         except NoResultFound:
             print("Not found")
-            return None
-        except MultipleResultsFound:
-            print("Multiple users found for the given query")
             return None
         except InvalidRequestError:
             print("Invalid")
