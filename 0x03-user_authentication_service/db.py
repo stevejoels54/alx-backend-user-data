@@ -35,3 +35,21 @@ class DB:
         """
         self._session.add(user)
         self._session.commit()
+
+    def find_user_by(self, **kwargs) -> User:
+        """Finds user in database
+        """
+        try:
+            user = self._session.query(User).filter_by(**kwargs).first()
+            if user is None:
+                raise NoResultFound
+            return user
+        except NoResultFound:
+            print("Not found")
+            return None
+        except MultipleResultsFound:
+            print("Multiple users found for the given query")
+            return None
+        except InvalidRequestError:
+            print("Invalid")
+            raise InvalidRequestError("Invalid query arguments")
