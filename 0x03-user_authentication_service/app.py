@@ -104,7 +104,7 @@ def get_reset_password_token() -> Union[str, tuple]:
 
 
 @app.route('/reset_password', methods=['PUT'], strict_slashes=False)
-def update_password() -> Union[str, tuple]:
+def update_password() -> tuple:
     """PUT /reset_password
     JSON body:
       - email
