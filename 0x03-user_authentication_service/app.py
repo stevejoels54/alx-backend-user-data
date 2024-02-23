@@ -73,16 +73,14 @@ def logout():
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
-def profile() -> Response:
+def profile() -> Union[str, tuple]:
     """GET /profile
     Return:
       - profile of user
     """
     session_id = request.cookies.get("session_id")
-    if not session_id:
-        abort(403)
     user = AUTH.get_user_from_session_id(session_id)
-    if not user:
+    if user is None:
         abort(403)
     return jsonify({"email": user.email}), 200
 
@@ -104,7 +102,7 @@ def get_reset_password_token() -> Union[str, tuple]:
 
 
 @app.route('/reset_password', methods=['PUT'], strict_slashes=False)
-def update_password() -> tuple:
+def update_password() -> Union[str, tuple]:
     """PUT /reset_password
     JSON body:
       - email
