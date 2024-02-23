@@ -69,7 +69,7 @@ def logout() -> str:
     if not user:
         abort(403)
     AUTH.destroy_session(user.id)
-    return redirect(url_for("welcome"))
+    return redirect(url_for("home"))
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
