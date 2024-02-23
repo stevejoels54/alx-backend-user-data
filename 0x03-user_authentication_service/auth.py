@@ -3,6 +3,8 @@
 """
 import bcrypt
 from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
+from bcrypt import checkpw
 from db import DB
 import uuid
 from typing import Union
@@ -48,13 +50,14 @@ class Auth:
         """
         Validate login
         """
-        try:
-            user = self._db.find_user_by(email=email)
-            return bcrypt.checkpw(password.encode('utf-8'),
-                                  user.hashed_password)
-        except NoResultFound:
+        if not email or not password:
             return False
-        except ValueError:
+        try:
+            users_found = self._db.find_user_by(email=email)
+            hashed_password = users_found.hashed_password
+            return checkpw(password.encode(),
+                           hashed_password.encode('utf-8'))
+        except (NoResultFound, InvalidRequestError):
             return False
 
     def create_session(self, email: str) -> str:
