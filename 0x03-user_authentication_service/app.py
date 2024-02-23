@@ -73,7 +73,7 @@ def logout() -> str:
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
-def profile() -> Union[str, tuple]:
+def profile() -> tuple:
     """GET /profile
     Return:
       - profile of user
