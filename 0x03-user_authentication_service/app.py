@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """ Flask app
 """
-from flask import Flask, jsonify, request, abort, redirect
+from flask import Flask, jsonify, request, abort, redirect, Response
 from auth import Auth
 from typing import Union
 
@@ -73,7 +73,7 @@ def logout():
 
 
 @app.route('/profile', methods=['GET'], strict_slashes=False)
-def profile():
+def profile() -> Response:
     """GET /profile
     Return:
       - profile of user
