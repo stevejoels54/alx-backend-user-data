@@ -57,7 +57,7 @@ def login() -> Union[str, tuple]:
 
 
 @app.route('/sessions', methods=['DELETE'], strict_slashes=False)
-def logout() -> str:
+def logout():
     """DELETE /sessions
     Return:
       - redirect to GET /
