@@ -28,10 +28,13 @@ class Auth:
         Register a user
         """
         try:
-            self._db.find_user_by(email=email)
-            raise ValueError(f"User {email} already exists")
+            users_found = self._db.find_user_by(email=email)
+            if users_found:
+                raise ValueError("User {} already exists".format(email))
         except NoResultFound:
-            return self._db.add_user(email, _hash_password(password))
+            hashed_password = _hash_password(password).decode('utf-8')
+            user = self._db.add_user(email, hashed_password)
+            return user
 
     def valid_login(self, email: str, password: str) -> bool:
         """
